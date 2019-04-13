@@ -5,6 +5,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.graphics.Typeface
+import android.R.attr.typeface
+import android.content.res.AssetManager
+import java.util.*
+
 
 class SelectConfigFragment: Fragment() {
 
@@ -23,6 +29,17 @@ class SelectConfigFragment: Fragment() {
                 }
             }
         }
+
+        // Set Fonts
+        context?.applicationContext?.assets?.let { assetManager->
+            val typeface = Typeface.createFromAsset(
+                assetManager,
+                String.format(Locale.US, "fonts/%s", "Industria_Solid.ttf")
+            )
+            this.rootView?.findViewById<TextView>(R.id.top_text_1)?.typeface = typeface
+            this.rootView?.findViewById<TextView>(R.id.top_text_2)?.typeface = typeface
+        }
+
 
         return rootView
     }
