@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">1984Werewolf</string>
+    <string name="config_select_title1">One Night</string>
+    <string name="config_select_title2">Ultimate Orwell</string>
+    <string name="start_game">Start Game</string>
 </resources>
