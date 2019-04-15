@@ -2,16 +2,17 @@ package dev.benchristians.a1984werewolf
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.ToggleButton
 
 class RoleSelectView(c: Context, a: AttributeSet): ToggleButton(c,a) {
 
-    fun init() {
-        this.post {
-            this.height = this.width
-        }
+    var role: Role? = null
+
+    fun init(role: Role) {
+        this.role = role
         this.setOnCheckedChangeListener { _, isChecked ->
-            // TODO
+            Log.e("Selected", this.role.toString())
         }
     }
 }

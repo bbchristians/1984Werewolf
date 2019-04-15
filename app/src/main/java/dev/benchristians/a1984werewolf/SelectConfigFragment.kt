@@ -7,26 +7,41 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.graphics.Typeface
-import android.R.attr.typeface
-import android.content.res.AssetManager
+import android.widget.Button
 import java.util.*
 
 
 class SelectConfigFragment: Fragment() {
+
+    val ROLE_CONFIG = listOf(
+        Role.BROTHERHOOD_MEMBER,
+        Role.BROTHERHOOD_MEMBER,
+        Role.SCAPEGOAT,
+        Role.INVESTIGATOR,
+        Role.LEXICOGRAPHER,
+        Role.DOUBLETHINKER,
+        Role.THOUGHT_POLICE,
+        Role.UNPERSON,
+        Role.INTERROGATOR,
+        Role.NEIGHBOR,
+        Role.NEIGHBOR,
+        Role.SINGER,
+        Role.PROLE,
+        Role.PROLE,
+        Role.PROLE
+    )
 
     var rootView: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_select_config, container, false)
 
+        var roleCount = 0
         // Initialize all buttons
-        this.rootView?.findViewById<ViewGroup>(R.id.role_button_container)?.let { container ->
-            (0 until container.childCount).forEach {
-                (container.getChildAt(it) as? ViewGroup)?.let { child_container ->
-                    (0 until child_container.childCount).forEach {
-                        (container.getChildAt(it) as? RoleSelectView)?.init()
-                    }
-                }
+        getAllRoleSelectButtons().forEach {
+            it?.init(ROLE_CONFIG[roleCount])
+            if( it != null ) {
+                roleCount++
             }
         }
 
@@ -40,8 +55,32 @@ class SelectConfigFragment: Fragment() {
             this.rootView?.findViewById<TextView>(R.id.top_text_2)?.typeface = typeface
         }
 
+        // Set Onclick
+        rootView?.findViewById<Button>(R.id.play_button)?.setOnClickListener {
+            (activity as? MainActivity)?.switchToNarration(this.getSelectedRoles())
+        }
 
         return rootView
+    }
+
+    private fun getAllRoleSelectButtons(): List<RoleSelectView?> {
+        return this.rootView?.findViewById<ViewGroup>(R.id.role_button_container)?.let { container ->
+            (0 until container.childCount).flatMap {
+                (container.getChildAt(it) as? ViewGroup)?.let { child_container ->
+                    (0 until child_container.childCount).map {
+                        child_container.getChildAt(it) as? RoleSelectView
+                    }
+                }?: listOf()
+            }
+        } ?: listOf()
+    }
+
+    private fun getSelectedRoles(): List<Role> {
+        return getAllRoleSelectButtons().asSequence().filter { roleSelectView: RoleSelectView? ->
+            roleSelectView?.isChecked ?: false
+        }.mapNotNull {
+            it?.role
+        }.toList()
     }
 
 }
