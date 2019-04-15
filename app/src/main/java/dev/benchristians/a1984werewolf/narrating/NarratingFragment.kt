@@ -1,5 +1,6 @@
 package dev.benchristians.a1984werewolf.narrating
 
+import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -11,13 +12,26 @@ import android.widget.TextView
 import android.widget.ToggleButton
 import dev.benchristians.a1984werewolf.AudioQueue
 import dev.benchristians.a1984werewolf.R
+import java.util.*
 
 class NarratingFragment: Fragment() {
 
     var rootView: View? = null
 
     var player: MediaPlayer? = null
+    set(other) {
+        field?.pause()
+        field?.release()
+        field = other
+    }
+
     private var musicPlayer: MediaPlayer? = null
+    set(other) {
+        field?.pause()
+        field?.release()
+        field = other
+    }
+
     private var audioSequence: List<AudioQueue?> = listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -28,6 +42,16 @@ class NarratingFragment: Fragment() {
         }?.joinToString(", ")
 
         rootView?.findViewById<TextView>(R.id.world)?.text = roles
+
+        // Set Fonts
+        context?.applicationContext?.assets?.let { assetManager->
+            val typeface = Typeface.createFromAsset(
+                assetManager,
+                String.format(Locale.US, "fonts/%s", "Industria_Solid.ttf")
+            )
+            this.rootView?.findViewById<TextView>(R.id.top_text_1)?.typeface = typeface
+            this.rootView?.findViewById<TextView>(R.id.top_text_2)?.typeface = typeface
+        }
 
         initiateNarration()
 
@@ -62,6 +86,7 @@ class NarratingFragment: Fragment() {
             *mp3s,
             AudioQueue(R.raw.orwell_outro2, 0L))
         startNarration(0)
+        this.startMusicPlayer()
     }
 
     private fun startNarration(fromPoint: Int) {
@@ -71,21 +96,24 @@ class NarratingFragment: Fragment() {
             return
         }
         val audioQueue = this.audioSequence[fromPoint] ?: return
-        this.player = MediaPlayer.create(this.context, audioQueue.mp3)
-        this.player?.setOnCompletionListener {
-            Handler().postDelayed({
-                startNarration(fromPoint+1)
-            }, audioQueue.pauseDur)
+        this.context?.let { context ->
+            this.player = MediaPlayer.create(context, audioQueue.mp3)
+            this.player?.setOnCompletionListener {
+                Handler().postDelayed({
+                    startNarration(fromPoint+1)
+                }, audioQueue.pauseDur)
+            }
+            this.player?.start()
         }
-        this.player?.start()
-        this.startMusicPlayer()
     }
 
     private fun startMusicPlayer() {
-        this.musicPlayer = MediaPlayer.create(this.context, R.raw.background_music)
-        this.musicPlayer?.isLooping = true
-        this.musicPlayer?.setVolume(.15f, .15f)
-        this.musicPlayer?.start()
+        this.context?.let { context ->
+            this.musicPlayer = MediaPlayer.create(context, R.raw.background_music)
+            this.musicPlayer?.isLooping = true
+            this.musicPlayer?.setVolume(.15f, .15f)
+            this.musicPlayer?.start()
+        }
     }
 
     private fun hideNarrationButtons() {
