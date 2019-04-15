@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.ToggleButton
 import dev.benchristians.a1984werewolf.R
 
 class NarratingFragment: Fragment() {
@@ -14,6 +15,7 @@ class NarratingFragment: Fragment() {
     var rootView: View? = null
 
     var player: MediaPlayer? = null
+    var musicPlayer: MediaPlayer? = null
     private var audioSequence: List<Int> = listOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -26,6 +28,15 @@ class NarratingFragment: Fragment() {
         rootView?.findViewById<TextView>(R.id.world)?.text = roles
 
         initiateNarration()
+
+        rootView?.findViewById<ToggleButton>(R.id.pause_button)?.setOnCheckedChangeListener { _, isChecked ->
+            if( isChecked && this.player?.isPlaying == true ) {
+                this.player?.pause()
+            } else {
+                // TODO does this work
+                this.player?.start()
+            }
+        }
 
         return rootView
     }
@@ -45,7 +56,7 @@ class NarratingFragment: Fragment() {
         }?.toTypedArray() ?: return
 
         // TODO replace with INTRO and OUTRO audio files
-        this.audioSequence = listOf(R.raw.snaps, *mp3s, R.raw.snaps)
+        this.audioSequence = listOf(R.raw.orwell_intro2, R.raw.orwell_brotherhood1, R.raw.orwell_brotherhood2, *mp3s, R.raw.orwell_outro2)
         startNarration(0)
     }
 
@@ -56,5 +67,13 @@ class NarratingFragment: Fragment() {
             startNarration(fromPoint+1)
         }
         this.player?.start()
+        this.startMusicPlayer()
+    }
+
+    private fun startMusicPlayer() {
+        this.musicPlayer = MediaPlayer.create(this.context, R.raw.background_music)
+        this.musicPlayer?.isLooping = true
+        this.musicPlayer?.setVolume(.17F, .17F)
+        this.musicPlayer?.start()
     }
 }

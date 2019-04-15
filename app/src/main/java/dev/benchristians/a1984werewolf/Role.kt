@@ -1,7 +1,7 @@
 package dev.benchristians.a1984werewolf
 
 enum class Role(val order: Int, val backgroundResource: Int, val mp3Res: Int) {
-    BROTHERHOOD_MEMBER(0, -1, R.raw.snaps),
+    BROTHERHOOD_MEMBER(-1, -1, -1),
     SCAPEGOAT(1, -1, R.raw.snaps),
     INVESTIGATOR(2, -1, R.raw.snaps),
     LEXICOGRAPHER(4, -1, R.raw.snaps),
