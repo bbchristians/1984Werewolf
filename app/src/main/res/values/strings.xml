@@ -7,4 +7,7 @@
     <string name="button_pause">Pause</string>
     <string name="button_resume">Resume</string>
     <string name="button_stop">Stop</string>
+
+    <string name="brotherhood_title">The Brotherhood</string>
+    <string name="party_title">The Party</string>
 </resources>

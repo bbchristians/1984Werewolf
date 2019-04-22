@@ -24,4 +24,9 @@
         <item name="android:layout_margin">6dp</item>
     </style>
 
+    <style name="role_select_title">
+        <item name="android:layout_marginStart">6dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>
