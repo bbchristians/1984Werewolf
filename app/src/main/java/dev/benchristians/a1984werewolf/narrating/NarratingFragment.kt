@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.ToggleButton
 import dev.benchristians.a1984werewolf.AudioQueue
@@ -33,6 +34,7 @@ class NarratingFragment: Fragment() {
     }
 
     private var audioSequence: List<AudioQueue?> = listOf()
+    private var narrationStopped = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_narration, container, false)
@@ -40,8 +42,6 @@ class NarratingFragment: Fragment() {
         val roles = (this.activity as? NarratingActivity)?.getSelectedRoles()?.map {
             it.toString()
         }?.joinToString(", ")
-
-        rootView?.findViewById<TextView>(R.id.world)?.text = roles
 
         // Set Fonts
         context?.applicationContext?.assets?.let { assetManager->
@@ -55,12 +55,18 @@ class NarratingFragment: Fragment() {
 
         initiateNarration()
 
+        // Pause Button
         rootView?.findViewById<ToggleButton>(R.id.pause_button)?.setOnCheckedChangeListener { _, isChecked ->
             if( isChecked && this.player?.isPlaying == true ) {
                 this.player?.pause()
             } else {
                 this.player?.start()
             }
+        }
+
+        // Stop Button
+        rootView?.findViewById<Button>(R.id.stop_button)?.setOnClickListener {
+            this.stopNarration()
         }
 
         return rootView
@@ -90,7 +96,7 @@ class NarratingFragment: Fragment() {
     }
 
     private fun startNarration(fromPoint: Int) {
-        if( fromPoint >= this.audioSequence.size ) {
+        if( fromPoint >= this.audioSequence.size && !narrationStopped ) {
             // Narration complete
             hideNarrationButtons()
             return
@@ -130,5 +136,11 @@ class NarratingFragment: Fragment() {
         super.onStart()
         this.musicPlayer?.start()
         this.player?.start()
+    }
+
+    private fun stopNarration() {
+        narrationStopped = true
+        this.player?.stop()
+        this.musicPlayer?.stop()
     }
 }

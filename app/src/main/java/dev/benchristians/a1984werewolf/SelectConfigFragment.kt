@@ -14,8 +14,8 @@ import java.util.*
 class SelectConfigFragment: Fragment() {
 
     val ROLE_CONFIG = listOf(
-        Role.BROTHERHOOD_MEMBER,
-        Role.BROTHERHOOD_MEMBER,
+        Role.BROTHERHOOD_MEMBER_1,
+        Role.BROTHERHOOD_MEMBER_2,
         Role.SCAPEGOAT,
         Role.INVESTIGATOR,
         Role.LEXICOGRAPHER,
@@ -23,8 +23,8 @@ class SelectConfigFragment: Fragment() {
         Role.THOUGHT_POLICE,
         Role.UNPERSON,
         Role.INTERROGATOR,
-        Role.NEIGHBOR,
-        Role.NEIGHBOR,
+        Role.NEIGHBOR_1,
+        Role.NEIGHBOR_2,
         Role.SINGER,
         Role.PROLE,
         Role.PROLE,

@@ -19,7 +19,7 @@
     </style>
 
     <style name="role_select_button">
-        <item name="android:background">@drawable/role_select_button</item>
+        <item name="android:background">@drawable/role_select_button_deselected</item>
         <item name="android:foreground">@drawable/role_select_button_ripple</item>
         <item name="android:layout_margin">6dp</item>
     </style>

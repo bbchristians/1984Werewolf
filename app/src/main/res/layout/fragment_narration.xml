@@ -29,10 +29,11 @@
 
     </LinearLayout>
 
-    <TextView
-            android:id="@+id/world"
+    <ImageView
+            android:id="@+id/display_portrait"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:src="@drawable/big_brother"/>
 
     <LinearLayout
             android:id="@+id/narration_buttons"
